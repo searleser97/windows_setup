@@ -13,6 +13,12 @@ scoop install extras/vcredist2022
 scoop install versions/neovim-nightly
 scoop install extras/vscode
 scoop install main/nvm
+scoop install delta
+
+# save git credentials in computer
+git config --global credential.helper store
+# set nvim as default git editor
+git config --global core.editor "nvim"
 
 # nvm install 16
 # nvm use 16
