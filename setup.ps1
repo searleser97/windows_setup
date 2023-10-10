@@ -19,6 +19,7 @@ scoop install delta
 git config --global credential.helper store
 # set nvim as default git editor
 git config --global core.editor "nvim"
+scoop install lazygit
 
 # nvm install 16
 # nvm use 16
