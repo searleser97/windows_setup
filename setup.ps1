@@ -23,3 +23,5 @@ scoop install lazygit
 
 # nvm install 16
 # nvm use 16
+
+scoop install main/pyenv
