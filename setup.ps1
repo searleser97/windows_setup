@@ -19,6 +19,9 @@ scoop install delta
 git config --global credential.helper store
 # set nvim as default git editor
 git config --global core.editor "nvim"
+# auto create branches on remote locally
+git config --global push.autoSetupRemote true
+
 scoop install lazygit
 
 # nvm install 16
