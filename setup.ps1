@@ -21,6 +21,8 @@ git config --global credential.helper store
 git config --global core.editor "nvim"
 # auto create branches on remote locally
 git config --global push.autoSetupRemote true
+# set delta as default pager
+git config --global core.pager "delta"
 
 scoop install lazygit
 
