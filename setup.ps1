@@ -26,7 +26,9 @@ git config --global core.pager "delta"
 
 scoop install lazygit
 
-# nvm install 16
-# nvm use 16
+nvm install 16
+nvm use 16
 
-scoop install main/pyenv
+winget install Microsoft.DotNet.SDK.6
+
+Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile "./install-pyenv-win.ps1"; &"./install-pyenv-win.ps1"
