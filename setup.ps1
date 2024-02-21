@@ -10,7 +10,8 @@ scoop install main/ripgrep
 scoop install main/fd
 scoop install main/gcc
 scoop install extras/vcredist2022
-scoop install versions/neovim-nightly
+# scoop install versions/neovim-nightly
+choco install neovim --pre
 scoop install extras/vscode
 scoop install main/nvm
 scoop install delta
