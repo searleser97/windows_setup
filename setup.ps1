@@ -17,6 +17,7 @@ choco install neovim --pre
 scoop install extras/vscode
 scoop install main/nvm
 scoop install delta
+scoop install main/grep
 
 # save git credentials in computer
 git config --global credential.helper store
