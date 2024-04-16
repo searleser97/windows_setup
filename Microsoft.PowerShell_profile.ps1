@@ -3,4 +3,5 @@ Set-PSReadLineKeyHandler -Chord "Tab" -Function ForwardWord
 Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 
-Set-Alias gitlistfrom $HOME\windows_setup\gitlistfrom.ps1
+Set-Alias gitlogsince $HOME\windows_setup\gitlogsince.ps1
+Set-Alias gitbranchfrom $HOME\windows_setup\gitbranchfrom.ps1
