@@ -5,3 +5,5 @@ Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 Set-Alias gitlogsince $HOME\windows_setup\gitlogsince.ps1
 Set-Alias gitbranchfrom $HOME\windows_setup\gitbranchfrom.ps1
+Set-Alias gitlogauthor $HOME\windows_setup\gitlogauthor.ps1
+  
