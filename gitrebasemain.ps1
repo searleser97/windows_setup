@@ -1,11 +1,10 @@
-param(
-    [Parameter(Mandatory = $true)]
-    [string] $Branch
-)
-
-git switch origin/main
-git pull
-git switch users/sergiosanc/localConfig
+$ErrorActionPreference = "Stop"
+$initialBranch = $(git branch --show-current)
+$baseBranch = "users/sergiosanc/localConfig"
+git fetch origin main:main
+git switch $baseBranch
 git pull
 git rebase origin/main
-git switch $Branch
+git switch $initialBranch
+git rebase $baseBranch
+$ErrorActionPreference = "Continue"
