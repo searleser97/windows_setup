@@ -1,3 +1,8 @@
+param(
+    [Parameter(Mandatory = $true)]
+    [string] $Branch
+)
+
 git switch origin/main
 git pull
 git switch users/sergiosanc/localConfig
