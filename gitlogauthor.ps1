@@ -4,4 +4,4 @@ param(
 )
 
 
-git log --author="$Author" --pretty=oneline --abbrev-commit -i
+git log --author="$Author" --pretty="%Cblue%h%Creset (%ch by %Cgreen%an%Creset) %s" -i
