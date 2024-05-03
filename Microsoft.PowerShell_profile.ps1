@@ -8,3 +8,4 @@ Set-Alias gitbranchfrom $HOME\windows_setup\gitbranchfrom.ps1
 Set-Alias gitlogauthor $HOME\windows_setup\gitlogauthor.ps1
 Set-Alias gitrebasemain $HOME\windows_setup\gitrebasemain.ps1
 Set-Alias gitpush $HOME\windows_setup\gitpush.ps1
+Set-Alias gitlogtree $HOME\windows_setup\gitlogtree.ps1
