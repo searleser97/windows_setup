@@ -6,4 +6,7 @@ param(
 )
 
 git switch -c $NewBranch $OriginBranch
+if (! $?) {
+  exit
+}
 git branch --unset-upstream
