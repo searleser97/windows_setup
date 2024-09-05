@@ -34,7 +34,10 @@ nvm install 16
 nvm use 16
 
 winget install Microsoft.DotNet.SDK.6
-
+winget install wez.wezterm
+# install openGL compatibility pack using the app id that we got from runnig `winget search opengl`
+winget install 9NQPSL29BFFF
+ 
 Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile "./install-pyenv-win.ps1"; &"./install-pyenv-win.ps1"
 
 pyenv install 3.10.5
