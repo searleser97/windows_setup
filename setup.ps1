@@ -34,10 +34,9 @@ git config --global core.pager "delta"
 
 scoop install lazygit
 
-nvm install 16
-nvm use 16
+nvm install 22
+nvm use 22
 
-winget install Microsoft.DotNet.SDK.6
 winget install wez.wezterm
 # install openGL compatibility pack using the app id that we got from runnig `winget search opengl`
 winget install 9NQPSL29BFFF
