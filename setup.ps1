@@ -12,6 +12,10 @@ scoop install main/ripgrep
 scoop install main/fd
 scoop install main/gcc
 scoop install extras/vcredist2022
+
+winget install Microsoft.DotNet.SDK.8
+dotnet tool install -g git-credential-manager
+
 # scoop install versions/neovim-nightly
 choco install neovim --pre
 scoop install extras/vscode
