@@ -13,6 +13,7 @@ scoop install main/ripgrep
 scoop install main/fd
 scoop install main/gcc
 scoop install extras/vcredist2022
+scoop install fzf
 
 winget install Microsoft.DotNet.SDK.8
 dotnet tool install -g git-credential-manager
