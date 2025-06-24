@@ -3,6 +3,12 @@ Set-PSReadLineKeyHandler -Chord "Tab" -Function ForwardWord
 Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 
+$env:FZF_DEFAULT_COMMAND='fd --type d'
+
+function sd {
+    cd $(fzf)
+}
+
 Set-Alias gitlogsince $HOME\windows_setup\gitlogsince.ps1
 Set-Alias gitbranchfrom $HOME\windows_setup\gitbranchfrom.ps1
 Set-Alias gitlogauthor $HOME\windows_setup\gitlogauthor.ps1
