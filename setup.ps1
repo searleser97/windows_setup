@@ -45,5 +45,10 @@ winget install 9NQPSL29BFFF
  
 Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile "./install-pyenv-win.ps1"; &"./install-pyenv-win.ps1"
 
+# follow installation instruction from the following link -> https://github.com/microsoft/artifacts-credprovider
+# so that I can restore dotnet soludions with `dotnet restore` command without authentication issues
+# Basically it installs some sort of artifacts-credprovider and for that, we just need to run the .ps1 script that they mention in the wiki
+# but in order to execute it I needed to run `Set-ExecutionPolicy -ExecutionPolicy Unrestricted` first.
+
 pyenv install 3.10.5
 pyenv global 3.10.5
