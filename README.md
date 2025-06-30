@@ -6,7 +6,9 @@ To have a wezterm shortcut that opens up WSL directly we need to right click on 
 and select "new" -> "shortcut" option, then in the field "location" we should put the following
 (notice the quotes and the wezterm-gui.exe program, we shouldn't use wezterm.exe here)
 
-`"C:\Program Files\WezTerm\wezterm-gui.exe" start wsl.exe`
+`"C:\Program Files\WezTerm\wezterm-gui.exe" start wsl.exe ~`
+
+" ~ " symbol tells wsl to start in $HOME dir instead of windows home directory
 
 example:
 
