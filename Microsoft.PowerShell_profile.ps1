@@ -1,3 +1,4 @@
+Set-PSReadLineOption -EditMode Vi
 # Set-Alias -Name x86_64-w64-mingw32-gcc -Value gcc -Scope Global
 # Set-PSReadLineKeyHandler -Chord "Tab" -Function ForwardWord
 Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
