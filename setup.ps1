@@ -18,6 +18,7 @@ scoop install extras/vcredist2022
 scoop install fzf
 
 winget install Microsoft.DotNet.SDK.8
+winget install Microsoft.DotNet.SDK.9
 dotnet tool install -g git-credential-manager
 
 # scoop install versions/neovim-nightly
