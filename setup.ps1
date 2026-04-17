@@ -1,3 +1,5 @@
+# Run as administrator to avoid issues with choco installations
+
 winget install --id Microsoft.PowerShell --source winget
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
 irm get.scoop.sh | iex
@@ -36,8 +38,8 @@ git config --global core.pager "delta"
 
 scoop install lazygit
 
-nvm install 22
-nvm use 22
+nvm install 24
+nvm use 24
 
 winget install wez.wezterm
 # install openGL compatibility pack using the app id that we got from runnig `winget search opengl`
