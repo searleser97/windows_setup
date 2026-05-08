@@ -22,6 +22,7 @@ winget install Microsoft.DotNet.SDK.9
 winget install Microsoft.DotNet.SDK.10
 dotnet tool install -g git-credential-manager
 winget install Rustlang.Rustup --accept-package-agreements --accept-source-agreements
+cargo binstall tree-sitter-cli
 
 # scoop install versions/neovim-nightly
 choco install neovim --pre
