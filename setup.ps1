@@ -25,8 +25,8 @@ winget install Rustlang.Rustup --accept-package-agreements --accept-source-agree
 cargo install cargo-binstall
 cargo binstall tree-sitter-cli
 
-# scoop install versions/neovim-nightly
-choco install neovim --pre
+scoop install versions/neovim-nightly
+# choco install neovim --pre
 scoop install extras/vscode
 scoop install main/nvm
 scoop install delta
