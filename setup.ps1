@@ -46,6 +46,8 @@ scoop install lazygit
 nvm install 24
 nvm use 24
 
+npm install -g @mermaid-js/mermaid-cli
+
 winget install wez.wezterm
 # install openGL compatibility pack using the app id that we got from runnig `winget search opengl`
 winget install 9NQPSL29BFFF
