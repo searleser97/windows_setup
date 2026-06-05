@@ -28,6 +28,7 @@ if (!(Get-Command git-credential-manager -ErrorAction SilentlyContinue)) {
 }
 # C++ build tools required by Rust
 winget install Microsoft.VisualStudio.BuildTools --source winget --override "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64 --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --addProductLang En-us"
+Install-ScoopApp main/llvm
 
 winget install Rustlang.Rustup --source winget --accept-package-agreements --accept-source-agreements
 $cargoBin = "$env:USERPROFILE\.cargo\bin"
