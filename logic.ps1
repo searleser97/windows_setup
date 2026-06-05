@@ -26,7 +26,7 @@ scoop install delta
 scoop install main/grep
 
 # save git credentials in computer
-git config --global credential.helper store
+# git config --global credential.helper store
 # set nvim as default git editor
 git config --global core.editor "nvim"
 # auto create branches on remote locally
@@ -42,8 +42,8 @@ nvm use 24
 npm install -g @mermaid-js/mermaid-cli
 
 winget install wez.wezterm --source winget
-# install openGL compatibility pack using the app id that we got from runnig `winget search opengl`
-winget install 9NQPSL29BFFF --source winget
+# install openGL compatibility pack using the app id that we got from runnig `winget search opengl` for windows devbox
+# winget install 9NQPSL29BFFF --source winget
  
 Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile "./install-pyenv-win.ps1"; &"./install-pyenv-win.ps1"
 
