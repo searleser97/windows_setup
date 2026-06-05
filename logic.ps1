@@ -59,8 +59,9 @@ Install-ScoopApp lazygit
 nvm install 24
 nvm use 24
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-$nvmNodePath = "$env:USERPROFILE\scoop\apps\nvm\current\nodejs\nodejs"
-Write-Host "DEBUG: USERPROFILE=$env:USERPROFILE"
+$nvmRoot = (nvm root 2>$null | Select-String "Current Root:").ToString().Replace("Current Root: ", "").Trim()
+$nvmNodePath = "$nvmRoot\nodejs"
+Write-Host "DEBUG: nvmRoot=$nvmRoot"
 Write-Host "DEBUG: nvmNodePath=$nvmNodePath"
 Write-Host "DEBUG: Test-Path=$( Test-Path $nvmNodePath )"
 if (Test-Path $nvmNodePath) {
@@ -69,7 +70,7 @@ if (Test-Path $nvmNodePath) {
     Write-Warning "nvm nodejs path not found at: $nvmNodePath"
 }
 if (!(Get-Command npm -ErrorAction SilentlyContinue)) {
-    Write-Warning "npm not found in PATH. Current PATH: $env:Path"
+    Write-Warning "npm not found in PATH."
 }
 
 if (!(Get-Command mmdc -ErrorAction SilentlyContinue)) {
