@@ -68,7 +68,10 @@ if (!(Get-Command pyenv -ErrorAction SilentlyContinue)) {
 # Basically it installs some sort of artifacts-credprovider and for that, we just need to run the .ps1 script that they mention in the wiki
 # but in order to execute it I needed to run `Set-ExecutionPolicy -ExecutionPolicy Unrestricted` first.
 
-pyenv install 3.10.5
+$installedVersions = pyenv versions 2>$null
+if ($installedVersions -notmatch "3.10.5") {
+    pyenv install 3.10.5
+}
 pyenv global 3.10.5
 
 # Clone nvim config into default neovim config folder
