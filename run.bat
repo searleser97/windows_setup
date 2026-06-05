@@ -1,6 +1,6 @@
 @echo off
-:: Step 1: Set execution policy as admin (UAC prompt)
-powershell -Command "Start-Process powershell -Verb RunAs -Wait -ArgumentList '-Command Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force'"
+:: Step 1: Set execution policy as admin (UAC prompt) if not already Unrestricted
+powershell -Command "if ((Get-ExecutionPolicy) -ne 'Unrestricted') { Start-Process powershell -Verb RunAs -Wait -ArgumentList '-Command Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force' }"
 
 :: Step 2: Install PowerShell 7+
 winget install --id Microsoft.PowerShell --source winget
