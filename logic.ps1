@@ -61,16 +61,9 @@ nvm use 24
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 $nvmRoot = (nvm root 2>$null | Select-String "Current Root:").ToString().Replace("Current Root: ", "").Trim()
 $nvmNodePath = "$nvmRoot\nodejs"
-Write-Host "DEBUG: nvmRoot=$nvmRoot"
-Write-Host "DEBUG: nvmNodePath=$nvmNodePath"
-Write-Host "DEBUG: Test-Path=$( Test-Path $nvmNodePath )"
-if (Test-Path $nvmNodePath) {
-    $env:Path = "$nvmNodePath;$env:Path"
-} else {
-    Write-Warning "nvm nodejs path not found at: $nvmNodePath"
-}
+$env:Path = "$nvmNodePath;$env:Path"
 if (!(Get-Command npm -ErrorAction SilentlyContinue)) {
-    Write-Warning "npm not found in PATH."
+    Write-Warning "npm not found in PATH after adding: $nvmNodePath"
 }
 
 if (!(Get-Command mmdc -ErrorAction SilentlyContinue)) {
