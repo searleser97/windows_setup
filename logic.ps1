@@ -59,7 +59,7 @@ Install-ScoopApp lazygit
 nvm install 24
 nvm use 24
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-$nvmNodePath = "$env:USERPROFILE\scoop\persist\nvm\nodejs\nodejs"
+$nvmNodePath = "$env:USERPROFILE\scoop\apps\nvm\current\nodejs\nodejs"
 if (Test-Path $nvmNodePath) { $env:Path = "$nvmNodePath;$env:Path" }
 
 if (!(Get-Command mmdc -ErrorAction SilentlyContinue)) {
