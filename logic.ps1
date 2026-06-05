@@ -27,7 +27,7 @@ if (!(Get-Command git-credential-manager -ErrorAction SilentlyContinue)) {
     dotnet tool install -g git-credential-manager
 }
 # C++ build tools required by Rust
-winget install Microsoft.VisualStudio.2022.BuildTools --source winget --override "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64 --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --addProductLang En-us"
+winget install Microsoft.VisualStudio.BuildTools --source winget --override "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64 --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --addProductLang En-us"
 
 winget install Rustlang.Rustup --source winget --accept-package-agreements --accept-source-agreements
 if (!(Get-Command cargo-binstall -ErrorAction SilentlyContinue)) {
@@ -95,3 +95,11 @@ $vscodeConfigPath = "$env:APPDATA\Code\User"
 New-Item -ItemType Directory -Path $vscodeConfigPath -Force | Out-Null
 Copy-Item "$nvimConfigPath\keybindings.json" "$vscodeConfigPath\keybindings.json"
 Copy-Item "$nvimConfigPath\settings.json" "$vscodeConfigPath\settings.json"
+
+# Set PowerShell 7 as default Windows Terminal profile
+$wtSettings = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+if (Test-Path $wtSettings) {
+    $settings = Get-Content $wtSettings | ConvertFrom-Json
+    $settings.defaultProfile = "{574e775e-4f2a-5b96-ac1e-a2962a402336}"
+    $settings | ConvertTo-Json -Depth 100 | Set-Content $wtSettings
+}
