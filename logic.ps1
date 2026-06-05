@@ -62,9 +62,7 @@ nvm use 24
 $nodeDir = Get-ChildItem "$env:USERPROFILE\scoop\persist\nvm\nodejs" -Directory | Where-Object { $_.Name -match '^v24' } | Sort-Object { [version]($_.Name -replace '^v','') } -Descending | Select-Object -First 1
 if ($nodeDir) {
     $env:Path = "$($nodeDir.FullName);$env:Path"
-    if (!(Get-Command mmdc -ErrorAction SilentlyContinue)) {
-        npm install -g @mermaid-js/mermaid-cli
-    }
+    npm install -g @mermaid-js/mermaid-cli
 } else {
     Write-Warning "No node v24 found in scoop persist nvm"
 }
