@@ -60,6 +60,9 @@ nvm install 24
 nvm use 24
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 $nvmNodePath = "$env:USERPROFILE\scoop\apps\nvm\current\nodejs\nodejs"
+Write-Host "DEBUG: USERPROFILE=$env:USERPROFILE"
+Write-Host "DEBUG: nvmNodePath=$nvmNodePath"
+Write-Host "DEBUG: Test-Path=$( Test-Path $nvmNodePath )"
 if (Test-Path $nvmNodePath) {
     $env:Path = "$nvmNodePath;$env:Path"
 } else {
