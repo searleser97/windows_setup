@@ -3,16 +3,22 @@ if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
     irm get.scoop.sh | iex
 }
 
+function Install-ScoopApp($app) {
+    if (!(scoop list $app 2>$null | Select-String $app.Split("/")[-1])) {
+        scoop install $app
+    }
+}
+
 scoop bucket add main
 scoop bucket add extras
 scoop bucket add versions
 
-scoop install main/git
-scoop install main/ripgrep
-scoop install main/fd
-scoop install main/gcc
-scoop install extras/vcredist2022
-scoop install fzf
+Install-ScoopApp main/git
+Install-ScoopApp main/ripgrep
+Install-ScoopApp main/fd
+Install-ScoopApp main/gcc
+Install-ScoopApp extras/vcredist2022
+Install-ScoopApp fzf
 
 winget install Microsoft.DotNet.SDK.8 --source winget
 winget install Microsoft.DotNet.SDK.9 --source winget
@@ -31,11 +37,11 @@ if (!(Get-Command tree-sitter -ErrorAction SilentlyContinue)) {
     cargo binstall tree-sitter-cli -y
 }
 
-scoop install versions/neovim-nightly
-scoop install extras/vscode
-scoop install main/nvm
-scoop install delta
-scoop install main/grep
+Install-ScoopApp versions/neovim-nightly
+Install-ScoopApp extras/vscode
+Install-ScoopApp main/nvm
+Install-ScoopApp delta
+Install-ScoopApp main/grep
 
 # save git credentials in computer
 # git config --global credential.helper store
@@ -46,7 +52,7 @@ git config --global push.autoSetupRemote true
 # set delta as default pager
 git config --global core.pager "delta"
 
-scoop install lazygit
+Install-ScoopApp lazygit
 
 nvm install 24
 nvm use 24
