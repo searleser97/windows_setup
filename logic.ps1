@@ -58,8 +58,8 @@ Install-ScoopApp lazygit
 
 nvm install 24
 nvm use 24
-# Find the node version directory matching major version 24
-$nodeDir = Get-ChildItem "$env:USERPROFILE\scoop\persist\nvm\nodejs" -Directory | Where-Object { $_.Name -match '^v24' } | Select-Object -First 1
+# Find the highest node v24.x.x version directory
+$nodeDir = Get-ChildItem "$env:USERPROFILE\scoop\persist\nvm\nodejs" -Directory | Where-Object { $_.Name -match '^v24' } | Sort-Object { [version]($_.Name -replace '^v','') } -Descending | Select-Object -First 1
 if ($nodeDir) {
     $env:Path = "$($nodeDir.FullName);$env:Path"
     npm install -g @mermaid-js/mermaid-cli
