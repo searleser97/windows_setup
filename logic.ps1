@@ -59,10 +59,10 @@ Install-ScoopApp lazygit
 nvm install 24
 nvm use 24
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-$env:Path = "$env:USERPROFILE\scoop\apps\nvm\current\nodejs\nodejs;$env:Path"
+$npmCmd = "$env:USERPROFILE\scoop\apps\nvm\current\nodejs\nodejs\npm.cmd"
 
 if (!(Get-Command mmdc -ErrorAction SilentlyContinue)) {
-    npm install -g @mermaid-js/mermaid-cli
+    & $npmCmd install -g @mermaid-js/mermaid-cli
 }
 
 winget install wez.wezterm --source winget
