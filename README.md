@@ -2,10 +2,13 @@
 
 ## Quick Start
 
+Paste the entire block below into Windows Terminal (allow multiline paste when prompted):
+
 ```powershell
 winget install Git.Git --source winget
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 git clone https://github.com/searleser97/windows_setup; cd windows_setup; .\run.bat
+
 ```
 
 ## Notes

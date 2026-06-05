@@ -61,6 +61,7 @@ winget install wez.wezterm --source winget
  
 if (!(Get-Command pyenv -ErrorAction SilentlyContinue)) {
     Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile "./install-pyenv-win.ps1"; &"./install-pyenv-win.ps1"
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 }
 
 # follow installation instruction from the following link -> https://github.com/microsoft/artifacts-credprovider
@@ -84,5 +85,7 @@ if (!(Test-Path $nvimConfigPath)) {
 Copy-Item "$nvimConfigPath\.wezterm.lua" "$env:USERPROFILE\.wezterm.lua"
 
 # Copy vscode config files to default vscode settings folder
-Copy-Item "$nvimConfigPath\keybindings.json" "$env:APPDATA\Code\User\keybindings.json"
-Copy-Item "$nvimConfigPath\settings.json" "$env:APPDATA\Code\User\settings.json"
+$vscodeConfigPath = "$env:APPDATA\Code\User"
+New-Item -ItemType Directory -Path $vscodeConfigPath -Force | Out-Null
+Copy-Item "$nvimConfigPath\keybindings.json" "$vscodeConfigPath\keybindings.json"
+Copy-Item "$nvimConfigPath\settings.json" "$vscodeConfigPath\settings.json"
