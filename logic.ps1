@@ -60,7 +60,14 @@ nvm install 24
 nvm use 24
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 $nvmNodePath = "$env:USERPROFILE\scoop\apps\nvm\current\nodejs\nodejs"
-if (Test-Path $nvmNodePath) { $env:Path = "$nvmNodePath;$env:Path" }
+if (Test-Path $nvmNodePath) {
+    $env:Path = "$nvmNodePath;$env:Path"
+} else {
+    Write-Warning "nvm nodejs path not found at: $nvmNodePath"
+}
+if (!(Get-Command npm -ErrorAction SilentlyContinue)) {
+    Write-Warning "npm not found in PATH. Current PATH: $env:Path"
+}
 
 if (!(Get-Command mmdc -ErrorAction SilentlyContinue)) {
     npm install -g @mermaid-js/mermaid-cli
