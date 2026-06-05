@@ -58,14 +58,9 @@ Install-ScoopApp lazygit
 
 nvm install 24
 nvm use 24
-$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-# Resolve the actual node version path (bypasses multiple junctions/symlinks)
-$nodeVersionDir = (Get-Item "$env:USERPROFILE\scoop\persist\nvm\nodejs\nodejs").Target
-$npmCmd = "$nodeVersionDir\npm.cmd"
 
-if (!(Get-Command mmdc -ErrorAction SilentlyContinue)) {
-    & $npmCmd install -g @mermaid-js/mermaid-cli
-}
+# Launch new pwsh session to pick up nvm PATH changes
+pwsh -Command "npm install -g @mermaid-js/mermaid-cli"
 
 winget install wez.wezterm --source winget
 # install openGL compatibility pack using the app id that we got from runnig `winget search opengl` for windows devbox
