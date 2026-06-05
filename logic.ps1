@@ -1,10 +1,4 @@
-# Run as administrator to avoid issues with choco installations
-
-winget install --id Microsoft.PowerShell --source winget
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
 irm get.scoop.sh | iex
-# install chocolatey
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 scoop bucket add main
 scoop bucket add extras
@@ -26,7 +20,6 @@ cargo install cargo-binstall
 cargo binstall tree-sitter-cli
 
 scoop install versions/neovim-nightly
-# choco install neovim --pre
 scoop install extras/vscode
 scoop install main/nvm
 scoop install delta
