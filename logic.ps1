@@ -15,6 +15,9 @@ winget install Microsoft.DotNet.SDK.8 --source winget
 winget install Microsoft.DotNet.SDK.9 --source winget
 winget install Microsoft.DotNet.SDK.10 --source winget
 dotnet tool install -g git-credential-manager
+# C++ build tools required by Rust
+winget install Microsoft.VisualStudio.2022.BuildTools --source winget --override "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64 --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --addProductLang En-us"
+
 winget install Rustlang.Rustup --source winget --accept-package-agreements --accept-source-agreements
 cargo install cargo-binstall
 cargo binstall tree-sitter-cli
@@ -54,3 +57,14 @@ Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv
 
 pyenv install 3.10.5
 pyenv global 3.10.5
+
+# Clone nvim config into default neovim config folder
+$nvimConfigPath = "$env:LOCALAPPDATA\nvim"
+git clone https://github.com/searleser97/nvim_lua $nvimConfigPath
+
+# Copy wezterm config to home directory
+Copy-Item "$nvimConfigPath\.wezterm.lua" "$env:USERPROFILE\.wezterm.lua"
+
+# Copy vscode config files to default vscode settings folder
+Copy-Item "$nvimConfigPath\keybindings.json" "$env:APPDATA\Code\User\keybindings.json"
+Copy-Item "$nvimConfigPath\settings.json" "$env:APPDATA\Code\User\settings.json"
