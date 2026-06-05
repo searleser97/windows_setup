@@ -59,7 +59,8 @@ Install-ScoopApp lazygit
 nvm install 24
 nvm use 24
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-$npmCmd = "$env:USERPROFILE\scoop\apps\nvm\current\nodejs\nodejs\npm.cmd"
+$nvmDir = Get-ChildItem "$env:USERPROFILE\scoop\apps\nvm" -Directory | Where-Object { $_.Name -match '^\d' } | Select-Object -Last 1
+$npmCmd = "$($nvmDir.FullName)\nodejs\nodejs\npm.cmd"
 
 if (!(Get-Command mmdc -ErrorAction SilentlyContinue)) {
     & $npmCmd install -g @mermaid-js/mermaid-cli
