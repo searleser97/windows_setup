@@ -58,13 +58,13 @@ Install-ScoopApp lazygit
 
 nvm install 24
 nvm use 24
-# Find the actual node version directory (avoids symlink resolution issues)
-$nodeDir = Get-ChildItem "$env:USERPROFILE\scoop\persist\nvm\nodejs" -Directory | Where-Object { $_.Name -match '^v' } | Sort-Object Name -Descending | Select-Object -First 1
+# Find the node version directory matching major version 24
+$nodeDir = Get-ChildItem "$env:USERPROFILE\scoop\persist\nvm\nodejs" -Directory | Where-Object { $_.Name -match '^v24' } | Select-Object -First 1
 if ($nodeDir) {
     $env:Path = "$($nodeDir.FullName);$env:Path"
     npm install -g @mermaid-js/mermaid-cli
 } else {
-    Write-Warning "No node version found in scoop persist nvm"
+    Write-Warning "No node v24 found in scoop persist nvm"
 }
 
 winget install wez.wezterm --source winget
