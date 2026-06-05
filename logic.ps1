@@ -30,10 +30,11 @@ if (!(Get-Command git-credential-manager -ErrorAction SilentlyContinue)) {
 winget install Microsoft.VisualStudio.BuildTools --source winget --override "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64 --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --addProductLang En-us"
 
 winget install Rustlang.Rustup --source winget --accept-package-agreements --accept-source-agreements
-if (!(Get-Command cargo-binstall -ErrorAction SilentlyContinue)) {
+$cargoBin = "$env:USERPROFILE\.cargo\bin"
+if (!(Test-Path "$cargoBin\cargo-binstall.exe")) {
     cargo install cargo-binstall
 }
-if (!(Get-Command tree-sitter -ErrorAction SilentlyContinue)) {
+if (!(Test-Path "$cargoBin\tree-sitter.exe")) {
     cargo binstall tree-sitter-cli -y
 }
 
