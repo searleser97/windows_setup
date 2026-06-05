@@ -58,6 +58,12 @@ Install-ScoopApp lazygit
 
 nvm install 24
 nvm use 24
+# Find the highest node v24.x.x version directory
+$nodeDir = Get-ChildItem "$env:USERPROFILE\scoop\persist\nvm\nodejs" -Directory | Where-Object { $_.Name -match '^v24' } | Sort-Object { [version]($_.Name -replace '^v','') } -Descending | Select-Object -First 1
+if ($nodeDir) {
+    $env:Path = "$($nodeDir.FullName);$env:Path"
+    npm install -g prettier pnpm yarn vsts-npm-auth
+}
 
 winget install wez.wezterm --source winget
 # install openGL compatibility pack using the app id that we got from runnig `winget search opengl` for windows devbox
