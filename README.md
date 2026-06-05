@@ -1,6 +1,18 @@
 # windows_setup
 
-Run setup.ps1 in an admin terminal
+## Quick Start
+
+```
+winget install Git.Git --source winget
+```
+
+Open a **new terminal**, then:
+
+```
+git clone https://github.com/searleser97/windows_setup && cd windows_setup && .\run.bat
+```
+
+## Notes
 
 To have a wezterm shortcut that opens up WSL directly we need to right click on the windows desktop
 and select "new" -> "shortcut" option, then in the field "location" we should put the following

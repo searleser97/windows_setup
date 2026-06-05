@@ -11,11 +11,11 @@ scoop install main/gcc
 scoop install extras/vcredist2022
 scoop install fzf
 
-winget install Microsoft.DotNet.SDK.8
-winget install Microsoft.DotNet.SDK.9
-winget install Microsoft.DotNet.SDK.10
+winget install Microsoft.DotNet.SDK.8 --source winget
+winget install Microsoft.DotNet.SDK.9 --source winget
+winget install Microsoft.DotNet.SDK.10 --source winget
 dotnet tool install -g git-credential-manager
-winget install Rustlang.Rustup --accept-package-agreements --accept-source-agreements
+winget install Rustlang.Rustup --source winget --accept-package-agreements --accept-source-agreements
 cargo install cargo-binstall
 cargo binstall tree-sitter-cli
 
@@ -41,9 +41,9 @@ nvm use 24
 
 npm install -g @mermaid-js/mermaid-cli
 
-winget install wez.wezterm
+winget install wez.wezterm --source winget
 # install openGL compatibility pack using the app id that we got from runnig `winget search opengl`
-winget install 9NQPSL29BFFF
+winget install 9NQPSL29BFFF --source winget
  
 Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile "./install-pyenv-win.ps1"; &"./install-pyenv-win.ps1"
 
