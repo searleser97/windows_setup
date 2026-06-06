@@ -86,14 +86,15 @@ if (!(Get-Command pyenv -ErrorAction SilentlyContinue)) {
 Remove-Item "$env:LOCALAPPDATA\Microsoft\WindowsApps\python*.exe" -Force -ErrorAction SilentlyContinue
 
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-if (!(Test-Path "$env:USERPROFILE\.pyenv\pyenv-win\versions\3.10.5")) {
-    Write-Host "Installing Python 3.10.5 via pyenv..."
-    pyenv install 3.10.5
+$py311 = Get-ChildItem "$env:USERPROFILE\.pyenv\pyenv-win\versions" -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^3\.11' }
+if (!$py311) {
+    Write-Host "Installing Python 3.11 via pyenv..."
+    pyenv install 3.11
     if ($LASTEXITCODE -ne 0) {
-        Write-Warning "pyenv install 3.10.5 failed with exit code $LASTEXITCODE"
+        Write-Warning "pyenv install 3.11 failed with exit code $LASTEXITCODE"
     }
 }
-pyenv global 3.10.5
+pyenv global 3.11
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 python -m pip install --upgrade pip
 pip install termaid
