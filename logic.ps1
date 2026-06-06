@@ -87,10 +87,16 @@ Remove-Item "$env:LOCALAPPDATA\Microsoft\WindowsApps\python*.exe" -Force -ErrorA
 
 $installedVersions = pyenv versions 2>$null
 if ($installedVersions -notmatch "3.10.5") {
+    Write-Host "Installing Python 3.10.5 via pyenv..."
     pyenv install 3.10.5
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "pyenv install 3.10.5 failed with exit code $LASTEXITCODE"
+    }
 }
 pyenv global 3.10.5
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+Write-Host "DEBUG: python = $(where.exe python 2>$null)"
+Write-Host "DEBUG: pip = $(where.exe pip 2>$null)"
 pip install termaid
 
 # Clone nvim config into default neovim config folder
