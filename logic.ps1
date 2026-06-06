@@ -53,6 +53,8 @@ git config --global core.editor "nvim"
 git config --global push.autoSetupRemote true
 # set delta as default pager
 git config --global core.pager "delta"
+# enable long paths
+git config --global core.longpaths true
 
 Install-ScoopApp lazygit
 
