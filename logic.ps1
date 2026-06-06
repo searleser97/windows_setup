@@ -79,6 +79,9 @@ if (!(Get-Command pyenv -ErrorAction SilentlyContinue)) {
 # Basically it installs some sort of artifacts-credprovider and for that, we just need to run the .ps1 script that they mention in the wiki
 # but in order to execute it I needed to run `Set-ExecutionPolicy -ExecutionPolicy Unrestricted` first.
 
+# Disable Windows Store python aliases so pyenv python is used
+Remove-Item "$env:LOCALAPPDATA\Microsoft\WindowsApps\python*.exe" -Force -ErrorAction SilentlyContinue
+
 $installedVersions = pyenv versions 2>$null
 if ($installedVersions -notmatch "3.10.5") {
     pyenv install 3.10.5
