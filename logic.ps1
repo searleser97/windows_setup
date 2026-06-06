@@ -95,8 +95,7 @@ if (!(Test-Path "$env:USERPROFILE\.pyenv\pyenv-win\versions\3.10.5")) {
 }
 pyenv global 3.10.5
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-Write-Host "DEBUG: python = $(where.exe python 2>$null)"
-Write-Host "DEBUG: pip = $(where.exe pip 2>$null)"
+python -m pip install --upgrade pip
 pip install termaid
 
 # Clone nvim config into default neovim config folder
