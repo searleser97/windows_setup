@@ -20,6 +20,7 @@ Install-ScoopApp main/gcc
 Install-ScoopApp extras/vcredist2022
 Install-ScoopApp fzf
 
+winget install curl --source winget
 winget install Microsoft.DotNet.SDK.8 --source winget
 winget install Microsoft.DotNet.SDK.9 --source winget
 winget install Microsoft.DotNet.SDK.10 --source winget
