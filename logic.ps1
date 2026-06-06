@@ -70,8 +70,11 @@ winget install wez.wezterm --source winget
 # winget install 9NQPSL29BFFF --source winget
  
 if (!(Get-Command pyenv -ErrorAction SilentlyContinue)) {
+    Write-Host "Installing pyenv-win..."
     Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile "./install-pyenv-win.ps1"; &"./install-pyenv-win.ps1"
     $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+} else {
+    Write-Host "pyenv already installed, skipping..."
 }
 
 # follow installation instruction from the following link -> https://github.com/microsoft/artifacts-credprovider
