@@ -87,6 +87,7 @@ if ($installedVersions -notmatch "3.10.5") {
     pyenv install 3.10.5
 }
 pyenv global 3.10.5
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 pip install termaid
 
 # Clone nvim config into default neovim config folder
