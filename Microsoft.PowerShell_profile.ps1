@@ -4,6 +4,9 @@ Set-PSReadLineOption -EditMode Vi
 Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 
+# Use x64 .NET SDK (ARM64 translation layer)
+$env:DOTNET_ROOT = "C:\Program Files\dotnet\x64"
+$env:PATH = "C:\Program Files\dotnet\x64;$env:PATH"
 
 if ($PWD.Path -eq $HOME -and $args.Count -eq 0 -and -not $Host.CurrentCommandParameter) {
     cd E:\

@@ -21,9 +21,24 @@ Install-ScoopApp extras/vcredist2022
 Install-ScoopApp fzf
 
 winget install curl --source winget
-winget install Microsoft.DotNet.SDK.8 --source winget
-winget install Microsoft.DotNet.SDK.9 --source winget
-winget install Microsoft.DotNet.SDK.10 --source winget
+winget install Microsoft.DotNet.SDK.8 --source winget --architecture x64
+winget install Microsoft.DotNet.SDK.9 --source winget --architecture x64
+winget install Microsoft.DotNet.SDK.10 --source winget --architecture x64
+# Install x64 Azure Artifacts Credential Provider for NuGet authentication
+$credProviderUrl = "https://github.com/microsoft/artifacts-credprovider/releases/latest/download/Microsoft.win-x64.NuGet.CredentialProvider.zip"
+$credProviderZip = "$env:TEMP\credprovider-x64.zip"
+$credProviderDest = "$env:USERPROFILE\.nuget\plugins"
+if (!(Test-Path "$credProviderDest\netcore\CredentialProvider.Microsoft\CredentialProvider.Microsoft.exe")) {
+    Invoke-WebRequest -Uri $credProviderUrl -OutFile $credProviderZip
+    Expand-Archive -Path $credProviderZip -DestinationPath $credProviderDest -Force
+    # The zip nests under plugins/, move to correct location
+    if (Test-Path "$credProviderDest\plugins\netcore\CredentialProvider.Microsoft") {
+        Remove-Item "$credProviderDest\netcore\CredentialProvider.Microsoft" -Recurse -Force -ErrorAction SilentlyContinue
+        Move-Item "$credProviderDest\plugins\netcore\CredentialProvider.Microsoft" "$credProviderDest\netcore\CredentialProvider.Microsoft" -Force
+        Remove-Item "$credProviderDest\plugins" -Recurse -Force -ErrorAction SilentlyContinue
+    }
+    Remove-Item $credProviderZip -Force -ErrorAction SilentlyContinue
+}
 if (!(Get-Command git-credential-manager -ErrorAction SilentlyContinue)) {
     dotnet tool install -g git-credential-manager
 }
