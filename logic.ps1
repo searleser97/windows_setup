@@ -21,7 +21,7 @@ Install-ScoopApp extras/vcredist2022
 Install-ScoopApp fzf
 
 winget install curl --source winget
-winget install Microsoft.AzureCLI --accept-source-agreements --accept-package-agreements
+winget install Microsoft.AzureCLI --source winget --accept-source-agreements --accept-package-agreements
 winget install Microsoft.DotNet.SDK.8 --source winget --architecture x64
 winget install Microsoft.DotNet.SDK.9 --source winget --architecture x64
 winget install Microsoft.DotNet.SDK.10 --source winget --architecture x64
