@@ -140,3 +140,6 @@ if (Test-Path $wtSettings) {
     $settings.defaultProfile = "{574e775e-4f2a-5b96-ac1e-a2962a402336}"
     $settings | ConvertTo-Json -Depth 100 | Set-Content $wtSettings
 }
+
+winget install GitHub.Copilot
+
