@@ -40,6 +40,7 @@ if (!(Test-Path "$credProviderDest\netcore\CredentialProvider.Microsoft\Credenti
     }
     Remove-Item $credProviderZip -Force -ErrorAction SilentlyContinue
 }
+
 if (!(Get-Command git-credential-manager -ErrorAction SilentlyContinue)) {
     dotnet tool install -g git-credential-manager
 }
