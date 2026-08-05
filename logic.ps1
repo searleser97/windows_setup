@@ -145,3 +145,4 @@ if (Test-Path $wtSettings) {
 }
 
 winget install GitHub.Copilot
+winget install --id GitHub.cli
