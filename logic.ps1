@@ -43,6 +43,9 @@ if (!(Test-Path "$credProviderDest\netcore\CredentialProvider.Microsoft\Credenti
 if (!(Get-Command git-credential-manager -ErrorAction SilentlyContinue)) {
     dotnet tool install -g git-credential-manager
 }
+if (!(Get-Command dotnet-script -ErrorAction SilentlyContinue)) {
+    dotnet tool install -g dotnet-script
+}
 # C++ build tools required by Rust
 winget install Microsoft.VisualStudio.BuildTools --source winget --override "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64 --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --addProductLang En-us"
 Install-ScoopApp main/llvm
@@ -142,4 +145,3 @@ if (Test-Path $wtSettings) {
 }
 
 winget install GitHub.Copilot
-
