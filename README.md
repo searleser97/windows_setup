@@ -24,3 +24,50 @@ and select "new" -> "shortcut" option, then in the field "location" we should pu
 example:
 
 ![image](https://github.com/user-attachments/assets/e8d04493-a902-47c2-aa40-3782de02954e)
+
+## Neovim Explorer integration
+
+`logic.ps1` registers **Neovim** as the per-user default for common
+text and source-code extensions, including dotfiles such as `.gitconfig`,
+`.npmrc`, `.editorconfig`, and `.env`. It also adds:
+
+- A Windows application-capabilities registration for **Open with** and
+  **Default apps** discovery.
+- One searchable **Neovim** Start-menu application backed by `nvim.exe`, so
+  either name identifies the same app.
+- **Open in Neovim** for files, directories, and drives.
+- **Open Neovim here** when right-clicking a directory background.
+
+The GUI launcher is compiled and installed to
+`%LOCALAPPDATA%\Programs\NeovimInWezTerm`, so the integration continues to work
+if this repository is moved or removed. Rerun the registration script after
+pulling launcher updates:
+
+```powershell
+.\Register-NeovimExplorer.ps1
+```
+
+Windows may retain protected `UserChoice` defaults that scripts cannot safely
+replace. The registration script reports those extensions; select **Neovim**
+for them under **Settings > Apps > Default apps**.
+
+Windows 11 shows classic registry context-menu commands under **Show more
+options**. Associated files can be opened directly by double-clicking them; the
+Start-menu application opens Neovim in the user home directory.
+
+The Scoop `nvim.exe` shim is marked hidden so Windows Search favors these
+shortcuts. This does not affect running `nvim` from a terminal.
+
+To customize the associated extensions:
+
+```powershell
+.\Register-NeovimExplorer.ps1 -Extensions '.txt', '.md', '.json', '.lua', '.ps1'
+```
+
+Normal folder double-click navigation remains unchanged. To remove the
+integration and restore the per-user extension defaults captured during the
+first registration:
+
+```powershell
+.\Unregister-NeovimExplorer.ps1
+```

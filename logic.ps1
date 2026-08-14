@@ -84,6 +84,10 @@ if ($nodeDir) {
 }
 
 winget install wez.wezterm --source winget
+
+# Open text files and Explorer folders in Neovim inside WezTerm
+& "$PSScriptRoot\Register-NeovimExplorer.ps1"
+
 # install openGL compatibility pack using the app id that we got from runnig `winget search opengl` for windows devbox
 # winget install 9NQPSL29BFFF --source winget
  
