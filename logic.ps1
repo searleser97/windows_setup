@@ -309,10 +309,10 @@ Install-WingetPackage "wez.wezterm"
 $neovimInstallDirectory = Join-Path $env:LOCALAPPDATA "Programs\NeovimInWezTerm"
 $neovimLauncher = Join-Path $neovimInstallDirectory "Neovim.exe"
 $startMenuDirectory = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs"
+$nvimAliasShortcut = Join-Path $startMenuDirectory "nvim.lnk"
 $legacyNeovimPaths = @(
     (Join-Path $startMenuDirectory "Neovim (nvim) in WezTerm.lnk"),
     (Join-Path $startMenuDirectory "Neovim in WezTerm.lnk"),
-    (Join-Path $startMenuDirectory "nvim.lnk"),
     (Join-Path $neovimInstallDirectory "Open-NeovimInWezTerm.ps1"),
     (Join-Path $neovimInstallDirectory "NeovimInWezTerm.exe"),
     (Join-Path $neovimInstallDirectory "nvim.exe"),
@@ -332,7 +332,7 @@ $neovimCapabilities = Get-ItemProperty `
     "HKCU:\Software\searleser97\Neovim\Capabilities" `
     -ErrorAction SilentlyContinue
 $hasCurrentNeovimRegistration =
-    $neovimCapabilities.SetupVersion -eq "6"
+    $neovimCapabilities.SetupVersion -eq "7"
 $neovimCommandKey = Get-Item `
     "HKCU:\Software\Classes\Neovim.WezTerm\shell\open\command" `
     -ErrorAction SilentlyContinue
@@ -345,6 +345,7 @@ if (
     (Test-Path -LiteralPath $neovimLauncher) -and
     $neovimCommand -and
     $neovimCommand.Contains($neovimLauncher) -and
+    (Test-Path -LiteralPath $nvimAliasShortcut) -and
     !$hasLegacyNeovimFiles -and
     !$hasLegacyNeovimRegistration -and
     $hasCurrentNeovimRegistration

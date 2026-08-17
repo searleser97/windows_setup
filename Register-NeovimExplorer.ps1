@@ -31,10 +31,10 @@ $backupPath = Join-Path $installDirectory "association-backup.json"
 $shimHiddenMarker = Join-Path $installDirectory "scoop-nvim-shim-hidden"
 $startMenuDirectory = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs"
 $startMenuShortcut = Join-Path $startMenuDirectory "Neovim.lnk"
+$nvimAliasShortcut = Join-Path $startMenuDirectory "nvim.lnk"
 $previousStartMenuShortcuts = @(
     (Join-Path $startMenuDirectory "Neovim (nvim) in WezTerm.lnk"),
-    (Join-Path $startMenuDirectory "Neovim in WezTerm.lnk"),
-    (Join-Path $startMenuDirectory "nvim.lnk")
+    (Join-Path $startMenuDirectory "Neovim in WezTerm.lnk")
 )
 
 if (!(Test-Path -LiteralPath $launcherProject)) {
@@ -454,7 +454,7 @@ Set-RegistryValue `
     -Name "Neovim" `
     -Value $capabilitiesPath
 Set-RegistryValue -RelativePath $capabilitiesPath -Name "ApplicationName" -Value "Neovim"
-Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "6"
+Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "7"
 Set-RegistryValue `
     -RelativePath $capabilitiesPath `
     -Name "ApplicationDescription" `
@@ -484,21 +484,23 @@ foreach ($legacyShortcut in $previousStartMenuShortcuts) {
     [ShortcutPropertyStore]::NotifyItemDeleted($legacyShortcut)
 }
 $shortcutShell = New-Object -ComObject WScript.Shell
-$shortcut = $shortcutShell.CreateShortcut($startMenuShortcut)
-$shortcut.TargetPath = $launcherPath
-$shortcut.Arguments = ""
-$shortcut.WorkingDirectory = $env:USERPROFILE
-$shortcut.IconLocation = $icon
-$shortcut.Description = "Open Neovim in WezTerm"
-$shortcut.Save()
-[ShortcutPropertyStore]::SetAppUserModelId($startMenuShortcut, "searleser97.Neovim")
-[ShortcutPropertyStore]::SetKeywords(
-    $startMenuShortcut,
-    [string[]]@("Neovim", "nvim")
-)
-$shortcutKeywords = [ShortcutPropertyStore]::GetKeywords($startMenuShortcut)
-if ($shortcutKeywords -notcontains "nvim") {
-    throw "The nvim search keyword was not saved to the Neovim shortcut."
+foreach ($shortcutPath in @($startMenuShortcut, $nvimAliasShortcut)) {
+    $shortcut = $shortcutShell.CreateShortcut($shortcutPath)
+    $shortcut.TargetPath = $launcherPath
+    $shortcut.Arguments = ""
+    $shortcut.WorkingDirectory = $env:USERPROFILE
+    $shortcut.IconLocation = $icon
+    $shortcut.Description = "Open Neovim in WezTerm"
+    $shortcut.Save()
+    [ShortcutPropertyStore]::SetAppUserModelId($shortcutPath, "searleser97.Neovim")
+    [ShortcutPropertyStore]::SetKeywords(
+        $shortcutPath,
+        [string[]]@("Neovim", "nvim")
+    )
+    $shortcutKeywords = [ShortcutPropertyStore]::GetKeywords($shortcutPath)
+    if ($shortcutKeywords -notcontains "nvim") {
+        throw "The nvim search keyword was not saved to $shortcutPath."
+    }
 }
 
 $backup = @{}
@@ -613,5 +615,6 @@ if ($userChoiceOverrides) {
 }
 
 [ShortcutPropertyStore]::NotifyItemUpdated($startMenuShortcut)
+[ShortcutPropertyStore]::NotifyItemUpdated($nvimAliasShortcut)
 [ShortcutPropertyStore]::NotifyItemUpdated($normalizedNeovimPath)
 [ShortcutPropertyStore]::NotifyAssociationsChanged()

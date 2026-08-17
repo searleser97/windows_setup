@@ -50,6 +50,8 @@ text and source-code extensions, including dotfiles such as `.gitconfig`,
   shortcut stores `Neovim` and `nvim` in the documented `System.Keywords`
   property. Windows Search indexes this property, although Start Search ranking
   is controlled by Windows and is not guaranteed.
+- `Neovim.lnk` and `nvim.lnk` are Start-menu aliases for the same launcher and
+  AppUserModelID. File associations still register only the **Neovim** app.
 - **Open in Neovim** for files, directories, and drives.
 - **Open Neovim here** when right-clicking a directory background.
 
