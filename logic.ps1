@@ -33,7 +33,23 @@ function Test-Command {
 function Test-WingetPackage {
     param([Parameter(Mandatory)][string]$Id)
 
-    return $script:wingetPackageList -match "(?im)\b$([regex]::Escape($Id))\b"
+    if ($script:wingetPackageList -match "(?im)\b$([regex]::Escape($Id))\b") {
+        return $true
+    }
+
+    $previousPreference = $PSNativeCommandUseErrorActionPreference
+    $PSNativeCommandUseErrorActionPreference = $false
+    try {
+        $output = winget list --id $Id --exact --disable-interactivity 2>$null |
+            Out-String
+        $querySucceeded = $LASTEXITCODE -eq 0
+    } finally {
+        $PSNativeCommandUseErrorActionPreference = $previousPreference
+    }
+    return (
+        $querySucceeded -and
+        $output -match "(?im)\b$([regex]::Escape($Id))\b"
+    )
 }
 
 function Install-WingetPackage {
