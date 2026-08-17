@@ -271,6 +271,13 @@ public static class ShortcutPropertyStore
     [DllImport("ole32.dll")]
     private static extern int PropVariantClear(ref PropVariant value);
 
+    [DllImport("propsys.dll", CharSet = CharSet.Unicode)]
+    private static extern int InitPropVariantFromStringVector(
+        [In, MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)]
+        string[] values,
+        uint valueCount,
+        out PropVariant value);
+
     public static void SetAppUserModelId(string shortcutPath, string appUserModelId)
     {
         SetStringProperty(
@@ -280,6 +287,59 @@ public static class ShortcutPropertyStore
                 PropertyId = 5
             },
             appUserModelId);
+    }
+
+    public static void SetKeywords(string shortcutPath, string[] keywords)
+    {
+        IPropertyStore propertyStore = OpenPropertyStore(shortcutPath);
+        var key = new PropertyKey {
+            FormatId = new Guid("F29F85E0-4FF9-1068-AB91-08002B27B3D9"),
+            PropertyId = 5
+        };
+        PropVariant value;
+        Marshal.ThrowExceptionForHR(
+            InitPropVariantFromStringVector(
+                keywords,
+                (uint)keywords.Length,
+                out value));
+
+        try {
+            Marshal.ThrowExceptionForHR(propertyStore.SetValue(ref key, ref value));
+            Marshal.ThrowExceptionForHR(propertyStore.Commit());
+        } finally {
+            PropVariantClear(ref value);
+            Marshal.FinalReleaseComObject(propertyStore);
+        }
+    }
+
+    public static string[] GetKeywords(string shortcutPath)
+    {
+        IPropertyStore propertyStore = OpenPropertyStore(shortcutPath);
+        var key = new PropertyKey {
+            FormatId = new Guid("F29F85E0-4FF9-1068-AB91-08002B27B3D9"),
+            PropertyId = 5
+        };
+        PropVariant value;
+        Marshal.ThrowExceptionForHR(propertyStore.GetValue(ref key, out value));
+
+        try {
+            if (value.VariantType != 0x101F) {
+                return Array.Empty<string>();
+            }
+
+            int count = unchecked((int)(value.PointerValue.ToInt64() & 0xFFFFFFFF));
+            var keywords = new string[count];
+            for (int index = 0; index < count; index++) {
+                IntPtr stringPointer = Marshal.ReadIntPtr(
+                    value.ReservedPointer,
+                    index * IntPtr.Size);
+                keywords[index] = Marshal.PtrToStringUni(stringPointer) ?? "";
+            }
+            return keywords;
+        } finally {
+            PropVariantClear(ref value);
+            Marshal.FinalReleaseComObject(propertyStore);
+        }
     }
 
     private static void SetStringProperty(
@@ -394,7 +454,7 @@ Set-RegistryValue `
     -Name "Neovim" `
     -Value $capabilitiesPath
 Set-RegistryValue -RelativePath $capabilitiesPath -Name "ApplicationName" -Value "Neovim"
-Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "5"
+Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "6"
 Set-RegistryValue `
     -RelativePath $capabilitiesPath `
     -Name "ApplicationDescription" `
@@ -432,6 +492,14 @@ $shortcut.IconLocation = $icon
 $shortcut.Description = "Open Neovim in WezTerm"
 $shortcut.Save()
 [ShortcutPropertyStore]::SetAppUserModelId($startMenuShortcut, "searleser97.Neovim")
+[ShortcutPropertyStore]::SetKeywords(
+    $startMenuShortcut,
+    [string[]]@("Neovim", "nvim")
+)
+$shortcutKeywords = [ShortcutPropertyStore]::GetKeywords($startMenuShortcut)
+if ($shortcutKeywords -notcontains "nvim") {
+    throw "The nvim search keyword was not saved to the Neovim shortcut."
+}
 
 $backup = @{}
 if (Test-Path -LiteralPath $backupPath) {
