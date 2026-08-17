@@ -301,6 +301,18 @@ $hasLegacyNeovimFiles = [bool](
 )
 $hasLegacyNeovimRegistration = Test-Path `
     "HKCU:\Software\Classes\Applications\NeovimInWezTerm.exe"
+if ($hasLegacyNeovimFiles -or $hasLegacyNeovimRegistration) {
+    Write-Host "[run ] Removing legacy Neovim Explorer integration"
+    Remove-Item `
+        -LiteralPath $legacyNeovimPaths `
+        -Force `
+        -ErrorAction SilentlyContinue
+    Remove-Item `
+        -LiteralPath "HKCU:\Software\Classes\Applications\NeovimInWezTerm.exe" `
+        -Recurse `
+        -Force `
+        -ErrorAction SilentlyContinue
+}
 $neovimCommandKey = Get-Item `
     "HKCU:\Software\Classes\Neovim.WezTerm\shell\open\command" `
     -ErrorAction SilentlyContinue
@@ -376,7 +388,7 @@ if ($hasTermaid) {
 
 $nvimConfigPath = Join-Path $env:LOCALAPPDATA "nvim"
 if (Test-Path -LiteralPath (Join-Path $nvimConfigPath ".git")) {
-    Write-Skipped "Neovim configuration"
+    Write-Skipped "Neovim configuration repository"
 } else {
     git clone https://github.com/searleser97/nvim_lua $nvimConfigPath
 }
