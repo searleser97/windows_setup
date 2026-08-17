@@ -104,6 +104,26 @@ function Test-DotNetSdk {
     return [bool](dotnet --list-sdks | Where-Object { $_ -match "^$Major\." })
 }
 
+function Get-AvailableStablePythonVersions {
+    $previousPreference = $PSNativeCommandUseErrorActionPreference
+    $PSNativeCommandUseErrorActionPreference = $false
+    try {
+        $output = pyenv install --list 2>$null
+        $querySucceeded = $LASTEXITCODE -eq 0
+    } finally {
+        $PSNativeCommandUseErrorActionPreference = $previousPreference
+    }
+    if (!$querySucceeded) {
+        throw "Unable to query the Python versions available through pyenv."
+    }
+
+    return @(
+        $output |
+            ForEach-Object { $_.Trim() } |
+            Where-Object { $_ -match "^\d+\.\d+\.\d+$" }
+    )
+}
+
 function Set-GitConfigIfNeeded {
     param(
         [Parameter(Mandatory)][string]$Name,
@@ -349,7 +369,45 @@ if ($pythonAliases) {
 }
 
 Refresh-Path
-$pythonVersion = "3.14.5"
+$requestedPythonVersion = "3.14.5"
+$requestedPythonPath = Join-Path `
+    $env:USERPROFILE `
+    ".pyenv\pyenv-win\versions\$requestedPythonVersion"
+$pythonVersion = if (Test-Path -LiteralPath $requestedPythonPath) {
+    $requestedPythonVersion
+} else {
+    $availablePythonVersions = Get-AvailableStablePythonVersions
+    if ($availablePythonVersions -notcontains $requestedPythonVersion) {
+        Write-Host "[run ] Updating pyenv version definitions"
+        $previousPreference = $PSNativeCommandUseErrorActionPreference
+        $PSNativeCommandUseErrorActionPreference = $false
+        try {
+            pyenv update
+            $updateSucceeded = $LASTEXITCODE -eq 0
+        } finally {
+            $PSNativeCommandUseErrorActionPreference = $previousPreference
+        }
+        if (!$updateSucceeded) {
+            Write-Warning "pyenv update failed; using the newest version in the existing definitions."
+        }
+        $availablePythonVersions = Get-AvailableStablePythonVersions
+    }
+
+    if ($availablePythonVersions -contains $requestedPythonVersion) {
+        $requestedPythonVersion
+    } else {
+        $fallbackVersion = $availablePythonVersions |
+            Where-Object { $_ -match "^3\.14\." } |
+            Sort-Object { [version]$_ } -Descending |
+            Select-Object -First 1
+        if (!$fallbackVersion) {
+            throw "pyenv does not provide a stable Python 3.14 release."
+        }
+        Write-Warning "Python $requestedPythonVersion is unavailable; using $fallbackVersion instead."
+        $fallbackVersion
+    }
+}
+
 $pythonPath = Join-Path $env:USERPROFILE ".pyenv\pyenv-win\versions\$pythonVersion"
 if (Test-Path -LiteralPath $pythonPath) {
     Write-Skipped "Python $pythonVersion"
