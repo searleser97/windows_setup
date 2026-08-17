@@ -385,7 +385,7 @@ Set-RegistryValue `
     -Name "Neovim" `
     -Value $capabilitiesPath
 Set-RegistryValue -RelativePath $capabilitiesPath -Name "ApplicationName" -Value "Neovim"
-Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "2"
+Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "3"
 Set-RegistryValue `
     -RelativePath $capabilitiesPath `
     -Name "ApplicationDescription" `
@@ -521,7 +521,10 @@ Write-Host "Registered Neovim for $($Extensions.Count) extensions and Explorer c
 if ($userChoiceOverrides) {
     Write-Warning "Windows has protected default-app choices for some extensions. Neovim is available under Open with, but these choices must be changed in Settings:"
     $userChoiceOverrides | Format-Table -AutoSize
-    Write-Host "Open Settings with: start ms-settings:defaultapps"
+    $registeredAppName = [Uri]::EscapeDataString("Neovim")
+    $defaultAppsUri = "ms-settings:defaultapps?registeredAppUser=$registeredAppName"
+    Write-Host "Opening Neovim's Default Apps page for confirmation..."
+    Start-Process $defaultAppsUri
 }
 
 [ShortcutPropertyStore]::NotifyItemUpdated($startMenuShortcut)

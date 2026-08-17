@@ -328,7 +328,7 @@ $neovimCapabilities = Get-ItemProperty `
     "HKCU:\Software\searleser97\Neovim\Capabilities" `
     -ErrorAction SilentlyContinue
 $hasCurrentNeovimRegistration =
-    $neovimCapabilities.SetupVersion -eq "2"
+    $neovimCapabilities.SetupVersion -eq "3"
 $neovimCommandKey = Get-Item `
     "HKCU:\Software\Classes\Neovim.WezTerm\shell\open\command" `
     -ErrorAction SilentlyContinue
@@ -374,22 +374,6 @@ $pythonVersion = if (Test-Path -LiteralPath $requestedPythonPath) {
     $requestedPythonVersion
 } else {
     $availablePythonVersions = Get-AvailableStablePythonVersions
-    if ($availablePythonVersions -notcontains $requestedPythonVersion) {
-        Write-Host "[run ] Updating pyenv version definitions"
-        $previousPreference = $PSNativeCommandUseErrorActionPreference
-        $PSNativeCommandUseErrorActionPreference = $false
-        try {
-            pyenv update
-            $updateSucceeded = $LASTEXITCODE -eq 0
-        } finally {
-            $PSNativeCommandUseErrorActionPreference = $previousPreference
-        }
-        if (!$updateSucceeded) {
-            Write-Warning "pyenv update failed; using the newest version in the existing definitions."
-        }
-        $availablePythonVersions = Get-AvailableStablePythonVersions
-    }
-
     if ($availablePythonVersions -contains $requestedPythonVersion) {
         $requestedPythonVersion
     } else {

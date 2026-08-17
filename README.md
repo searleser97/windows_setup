@@ -61,8 +61,9 @@ pulling launcher updates:
 ```
 
 Windows may retain protected `UserChoice` defaults that scripts cannot safely
-replace. The registration script reports those extensions; select **Neovim**
-for them under **Settings > Apps > Default apps**.
+replace. The registration script reports those extensions and opens Neovim's
+dedicated **Default Apps** Settings page; select **Neovim** for the remaining
+extensions there.
 
 Windows 11 shows classic registry context-menu commands under **Show more
 options**. Associated files can be opened directly by double-clicking them; the
