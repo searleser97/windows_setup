@@ -21,6 +21,8 @@ destinations always receive the latest versions.
 
 Rerunning the setup also detects and removes legacy Neovim launcher files,
 registrations, and duplicate Start-menu shortcuts from older script versions.
+The migration reports removed shortcuts and notifies Windows Shell so Explorer
+and Start Search refresh without restarting Explorer.
 
 ## Notes
 

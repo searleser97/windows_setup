@@ -128,13 +128,16 @@ if ($neovimIconFile) {
 } else {
     $icon = "$launcherPath,0"
 }
-Remove-Item `
-    -LiteralPath @(
-        (Join-Path $installDirectory "Open-NeovimInWezTerm.ps1"),
-        (Join-Path $installDirectory "NeovimInWezTerm.exe")
-    ) `
-    -Force `
-    -ErrorAction SilentlyContinue
+$legacyLauncherPaths = @(
+    (Join-Path $installDirectory "Open-NeovimInWezTerm.ps1"),
+    (Join-Path $installDirectory "NeovimInWezTerm.exe")
+)
+foreach ($legacyLauncherPath in $legacyLauncherPaths) {
+    if (Test-Path -LiteralPath $legacyLauncherPath) {
+        Remove-Item -LiteralPath $legacyLauncherPath -Force
+        Write-Host "Removed legacy Neovim launcher: $legacyLauncherPath"
+    }
+}
 
 $command = "`"$launcherPath`" `"%1`""
 
@@ -205,6 +208,13 @@ public static class ShortcutPropertyStore
         uint eventId,
         uint flags,
         IntPtr item1,
+        IntPtr item2);
+
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode, EntryPoint = "SHChangeNotify")]
+    private static extern void SHChangeNotifyPath(
+        uint eventId,
+        uint flags,
+        string item1,
         IntPtr item2);
 
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
@@ -317,6 +327,16 @@ public static class ShortcutPropertyStore
     {
         SHChangeNotify(0x08000000, 0, IntPtr.Zero, IntPtr.Zero);
     }
+
+    public static void NotifyItemDeleted(string path)
+    {
+        SHChangeNotifyPath(0x00000004, 0x00001005, path, IntPtr.Zero);
+    }
+
+    public static void NotifyItemUpdated(string path)
+    {
+        SHChangeNotifyPath(0x00002000, 0x00001005, path, IntPtr.Zero);
+    }
 }
 '@
 }
@@ -352,15 +372,20 @@ $fileAssociationsPath = "$capabilitiesPath\FileAssociations"
 $applicationPath = "Software\Classes\Applications\nvim.exe"
 [Microsoft.Win32.Registry]::CurrentUser.DeleteSubKeyTree($fileAssociationsPath, $false)
 [Microsoft.Win32.Registry]::CurrentUser.DeleteSubKeyTree($applicationPath, $false)
-[Microsoft.Win32.Registry]::CurrentUser.DeleteSubKeyTree(
-    "Software\Classes\Applications\NeovimInWezTerm.exe",
-    $false
-)
+$legacyApplicationPath = "Software\Classes\Applications\NeovimInWezTerm.exe"
+if (Test-Path "HKCU:\$legacyApplicationPath") {
+    [Microsoft.Win32.Registry]::CurrentUser.DeleteSubKeyTree(
+        $legacyApplicationPath,
+        $false
+    )
+    Write-Host "Removed legacy Neovim application registration: HKCU:\$legacyApplicationPath"
+}
 Set-RegistryValue `
     -RelativePath "Software\RegisteredApplications" `
     -Name "Neovim" `
     -Value $capabilitiesPath
 Set-RegistryValue -RelativePath $capabilitiesPath -Name "ApplicationName" -Value "Neovim"
+Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "2"
 Set-RegistryValue `
     -RelativePath $capabilitiesPath `
     -Name "ApplicationDescription" `
@@ -382,7 +407,13 @@ foreach ($extension in $Extensions) {
 }
 
 Write-Host "[4/6] Creating the Start menu shortcuts..."
-Remove-Item -LiteralPath $previousStartMenuShortcuts -Force -ErrorAction SilentlyContinue
+foreach ($legacyShortcut in $previousStartMenuShortcuts) {
+    if (Test-Path -LiteralPath $legacyShortcut) {
+        Remove-Item -LiteralPath $legacyShortcut -Force
+        Write-Host "Removed legacy Start-menu shortcut: $legacyShortcut"
+    }
+    [ShortcutPropertyStore]::NotifyItemDeleted($legacyShortcut)
+}
 $shortcutShell = New-Object -ComObject WScript.Shell
 $shortcut = $shortcutShell.CreateShortcut($startMenuShortcut)
 $shortcut.TargetPath = $launcherPath
@@ -493,4 +524,5 @@ if ($userChoiceOverrides) {
     Write-Host "Open Settings with: start ms-settings:defaultapps"
 }
 
+[ShortcutPropertyStore]::NotifyItemUpdated($startMenuShortcut)
 [ShortcutPropertyStore]::NotifyAssociationsChanged()

@@ -322,17 +322,13 @@ $hasLegacyNeovimFiles = [bool](
 $hasLegacyNeovimRegistration = Test-Path `
     "HKCU:\Software\Classes\Applications\NeovimInWezTerm.exe"
 if ($hasLegacyNeovimFiles -or $hasLegacyNeovimRegistration) {
-    Write-Host "[run ] Removing legacy Neovim Explorer integration"
-    Remove-Item `
-        -LiteralPath $legacyNeovimPaths `
-        -Force `
-        -ErrorAction SilentlyContinue
-    Remove-Item `
-        -LiteralPath "HKCU:\Software\Classes\Applications\NeovimInWezTerm.exe" `
-        -Recurse `
-        -Force `
-        -ErrorAction SilentlyContinue
+    Write-Host "[run ] Legacy Neovim integration detected; it will be removed"
 }
+$neovimCapabilities = Get-ItemProperty `
+    "HKCU:\Software\searleser97\Neovim\Capabilities" `
+    -ErrorAction SilentlyContinue
+$hasCurrentNeovimRegistration =
+    $neovimCapabilities.SetupVersion -eq "2"
 $neovimCommandKey = Get-Item `
     "HKCU:\Software\Classes\Neovim.WezTerm\shell\open\command" `
     -ErrorAction SilentlyContinue
@@ -346,7 +342,8 @@ if (
     $neovimCommand -and
     $neovimCommand.Contains($neovimLauncher) -and
     !$hasLegacyNeovimFiles -and
-    !$hasLegacyNeovimRegistration
+    !$hasLegacyNeovimRegistration -and
+    $hasCurrentNeovimRegistration
 ) {
     Write-Skipped "Neovim Explorer integration"
 } else {
