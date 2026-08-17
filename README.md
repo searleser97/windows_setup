@@ -46,8 +46,7 @@ text and source-code extensions, including dotfiles such as `.gitconfig`,
 
 - A Windows application-capabilities registration for **Open with** and
   **Default apps** discovery.
-- One searchable **Neovim** Start-menu application backed by `nvim.exe`, so
-  either name identifies the same app.
+- One searchable **Neovim** Start-menu application backed by `Neovim.exe`.
 - **Open in Neovim** for files, directories, and drives.
 - **Open Neovim here** when right-clicking a directory background.
 

@@ -25,7 +25,7 @@ $Extensions = @(
 $progId = "Neovim.WezTerm"
 $installDirectory = Join-Path $env:LOCALAPPDATA "Programs\NeovimInWezTerm"
 $launcherProject = Join-Path $PSScriptRoot "NeovimInWezTermLauncher.csproj"
-$launcherPath = Join-Path $installDirectory "nvim.exe"
+$launcherPath = Join-Path $installDirectory "Neovim.exe"
 $installedIconPath = Join-Path $installDirectory "neovim.ico"
 $backupPath = Join-Path $installDirectory "association-backup.json"
 $shimHiddenMarker = Join-Path $installDirectory "scoop-nvim-shim-hidden"
@@ -130,7 +130,8 @@ if ($neovimIconFile) {
 }
 $legacyLauncherPaths = @(
     (Join-Path $installDirectory "Open-NeovimInWezTerm.ps1"),
-    (Join-Path $installDirectory "NeovimInWezTerm.exe")
+    (Join-Path $installDirectory "NeovimInWezTerm.exe"),
+    (Join-Path $installDirectory "nvim.exe")
 )
 foreach ($legacyLauncherPath in $legacyLauncherPaths) {
     if (Test-Path -LiteralPath $legacyLauncherPath) {
@@ -369,23 +370,28 @@ Set-ShellCommand `
 Write-Host "[3/6] Registering Neovim as a Windows application..."
 $capabilitiesPath = "Software\searleser97\Neovim\Capabilities"
 $fileAssociationsPath = "$capabilitiesPath\FileAssociations"
-$applicationPath = "Software\Classes\Applications\nvim.exe"
+$applicationPath = "Software\Classes\Applications\Neovim.exe"
 [Microsoft.Win32.Registry]::CurrentUser.DeleteSubKeyTree($fileAssociationsPath, $false)
 [Microsoft.Win32.Registry]::CurrentUser.DeleteSubKeyTree($applicationPath, $false)
-$legacyApplicationPath = "Software\Classes\Applications\NeovimInWezTerm.exe"
-if (Test-Path "HKCU:\$legacyApplicationPath") {
-    [Microsoft.Win32.Registry]::CurrentUser.DeleteSubKeyTree(
-        $legacyApplicationPath,
-        $false
-    )
-    Write-Host "Removed legacy Neovim application registration: HKCU:\$legacyApplicationPath"
+$legacyApplicationPaths = @(
+    "Software\Classes\Applications\NeovimInWezTerm.exe",
+    "Software\Classes\Applications\nvim.exe"
+)
+foreach ($legacyApplicationPath in $legacyApplicationPaths) {
+    if (Test-Path "HKCU:\$legacyApplicationPath") {
+        [Microsoft.Win32.Registry]::CurrentUser.DeleteSubKeyTree(
+            $legacyApplicationPath,
+            $false
+        )
+        Write-Host "Removed legacy Neovim application registration: HKCU:\$legacyApplicationPath"
+    }
 }
 Set-RegistryValue `
     -RelativePath "Software\RegisteredApplications" `
     -Name "Neovim" `
     -Value $capabilitiesPath
 Set-RegistryValue -RelativePath $capabilitiesPath -Name "ApplicationName" -Value "Neovim"
-Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "3"
+Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "4"
 Set-RegistryValue `
     -RelativePath $capabilitiesPath `
     -Name "ApplicationDescription" `
@@ -420,7 +426,7 @@ $shortcut.TargetPath = $launcherPath
 $shortcut.Arguments = ""
 $shortcut.WorkingDirectory = $env:USERPROFILE
 $shortcut.IconLocation = $icon
-$shortcut.Description = "Open Neovim (nvim) in WezTerm"
+$shortcut.Description = "Open Neovim in WezTerm"
 $shortcut.Save()
 [ShortcutPropertyStore]::SetAppUserModelId($startMenuShortcut, "searleser97.Neovim")
 
@@ -467,6 +473,10 @@ foreach ($entry in @($backup.GetEnumerator())) {
             -LiteralPath (Join-Path $extensionPath "OpenWithList\nvim.exe") `
             -Force `
             -ErrorAction SilentlyContinue
+        Remove-Item `
+            -LiteralPath (Join-Path $extensionPath "OpenWithList\Neovim.exe") `
+            -Force `
+            -ErrorAction SilentlyContinue
     }
 }
 
@@ -496,8 +506,12 @@ for ($index = 0; $index -lt $Extensions.Count; $index++) {
         -LiteralPath (Join-Path $extensionPath "OpenWithList\NeovimInWezTerm.exe") `
         -Force `
         -ErrorAction SilentlyContinue
+    Remove-Item `
+        -LiteralPath (Join-Path $extensionPath "OpenWithList\nvim.exe") `
+        -Force `
+        -ErrorAction SilentlyContinue
     New-Item `
-        -Path (Join-Path $extensionPath "OpenWithList\nvim.exe") `
+        -Path (Join-Path $extensionPath "OpenWithList\Neovim.exe") `
         -Force |
         Out-Null
 }
@@ -528,4 +542,5 @@ if ($userChoiceOverrides) {
 }
 
 [ShortcutPropertyStore]::NotifyItemUpdated($startMenuShortcut)
+[ShortcutPropertyStore]::NotifyItemUpdated($normalizedNeovimPath)
 [ShortcutPropertyStore]::NotifyAssociationsChanged()

@@ -16,6 +16,7 @@ $startMenuShortcuts = @(
 
 $registrationPaths = @(
     "Software\Classes\$progId",
+    "Software\Classes\Applications\Neovim.exe",
     "Software\Classes\Applications\nvim.exe",
     "Software\Classes\Applications\NeovimInWezTerm.exe",
     "Software\Classes\*\shell\NeovimInWezTerm",
@@ -59,6 +60,10 @@ if (Test-Path -LiteralPath $backupPath) {
                 -ErrorAction SilentlyContinue
             Remove-Item `
                 -LiteralPath (Join-Path $extensionPath "OpenWithList\nvim.exe") `
+                -Force `
+                -ErrorAction SilentlyContinue
+            Remove-Item `
+                -LiteralPath (Join-Path $extensionPath "OpenWithList\Neovim.exe") `
                 -Force `
                 -ErrorAction SilentlyContinue
         }

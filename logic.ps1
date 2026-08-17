@@ -307,14 +307,15 @@ foreach ($package in @("prettier", "pnpm", "yarn", "vsts-npm-auth")) {
 Install-WingetPackage "wez.wezterm"
 
 $neovimInstallDirectory = Join-Path $env:LOCALAPPDATA "Programs\NeovimInWezTerm"
-$neovimLauncher = Join-Path $neovimInstallDirectory "nvim.exe"
+$neovimLauncher = Join-Path $neovimInstallDirectory "Neovim.exe"
 $startMenuDirectory = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs"
 $legacyNeovimPaths = @(
     (Join-Path $startMenuDirectory "Neovim (nvim) in WezTerm.lnk"),
     (Join-Path $startMenuDirectory "Neovim in WezTerm.lnk"),
     (Join-Path $startMenuDirectory "nvim.lnk"),
     (Join-Path $neovimInstallDirectory "Open-NeovimInWezTerm.ps1"),
-    (Join-Path $neovimInstallDirectory "NeovimInWezTerm.exe")
+    (Join-Path $neovimInstallDirectory "NeovimInWezTerm.exe"),
+    (Join-Path $neovimInstallDirectory "nvim.exe")
 )
 $hasLegacyNeovimFiles = [bool](
     $legacyNeovimPaths | Where-Object { Test-Path -LiteralPath $_ }
@@ -328,7 +329,7 @@ $neovimCapabilities = Get-ItemProperty `
     "HKCU:\Software\searleser97\Neovim\Capabilities" `
     -ErrorAction SilentlyContinue
 $hasCurrentNeovimRegistration =
-    $neovimCapabilities.SetupVersion -eq "3"
+    $neovimCapabilities.SetupVersion -eq "4"
 $neovimCommandKey = Get-Item `
     "HKCU:\Software\Classes\Neovim.WezTerm\shell\open\command" `
     -ErrorAction SilentlyContinue
