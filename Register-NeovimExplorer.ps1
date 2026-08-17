@@ -131,7 +131,10 @@ if ($neovimIconFile) {
 $legacyLauncherPaths = @(
     (Join-Path $installDirectory "Open-NeovimInWezTerm.ps1"),
     (Join-Path $installDirectory "NeovimInWezTerm.exe"),
-    (Join-Path $installDirectory "nvim.exe")
+    (Join-Path $installDirectory "nvim.exe"),
+    (Join-Path $installDirectory "nvim.dll"),
+    (Join-Path $installDirectory "nvim.deps.json"),
+    (Join-Path $installDirectory "nvim.runtimeconfig.json")
 )
 foreach ($legacyLauncherPath in $legacyLauncherPaths) {
     if (Test-Path -LiteralPath $legacyLauncherPath) {
@@ -391,7 +394,7 @@ Set-RegistryValue `
     -Name "Neovim" `
     -Value $capabilitiesPath
 Set-RegistryValue -RelativePath $capabilitiesPath -Name "ApplicationName" -Value "Neovim"
-Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "4"
+Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "5"
 Set-RegistryValue `
     -RelativePath $capabilitiesPath `
     -Name "ApplicationDescription" `

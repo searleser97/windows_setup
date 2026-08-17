@@ -315,7 +315,10 @@ $legacyNeovimPaths = @(
     (Join-Path $startMenuDirectory "nvim.lnk"),
     (Join-Path $neovimInstallDirectory "Open-NeovimInWezTerm.ps1"),
     (Join-Path $neovimInstallDirectory "NeovimInWezTerm.exe"),
-    (Join-Path $neovimInstallDirectory "nvim.exe")
+    (Join-Path $neovimInstallDirectory "nvim.exe"),
+    (Join-Path $neovimInstallDirectory "nvim.dll"),
+    (Join-Path $neovimInstallDirectory "nvim.deps.json"),
+    (Join-Path $neovimInstallDirectory "nvim.runtimeconfig.json")
 )
 $hasLegacyNeovimFiles = [bool](
     $legacyNeovimPaths | Where-Object { Test-Path -LiteralPath $_ }
@@ -329,7 +332,7 @@ $neovimCapabilities = Get-ItemProperty `
     "HKCU:\Software\searleser97\Neovim\Capabilities" `
     -ErrorAction SilentlyContinue
 $hasCurrentNeovimRegistration =
-    $neovimCapabilities.SetupVersion -eq "4"
+    $neovimCapabilities.SetupVersion -eq "5"
 $neovimCommandKey = Get-Item `
     "HKCU:\Software\Classes\Neovim.WezTerm\shell\open\command" `
     -ErrorAction SilentlyContinue
