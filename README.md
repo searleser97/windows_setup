@@ -11,6 +11,17 @@ git clone https://github.com/searleser97/windows_setup; cd windows_setup; .\run.
 
 ```
 
+## Safe reruns
+
+Every program and setting is checked directly before it is installed or
+configured. Rerunning `run.bat` skips items that are already present and
+continues with anything missing; no checkpoint files or extra flags are used.
+Repository-owned configuration files are copied on every run so local
+destinations always receive the latest versions.
+
+Rerunning the setup also detects and removes legacy Neovim launcher files,
+registrations, and duplicate Start-menu shortcuts from older script versions.
+
 ## Notes
 
 To have a wezterm shortcut that opens up WSL directly we need to right click on the windows desktop
