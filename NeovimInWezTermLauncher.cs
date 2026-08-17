@@ -27,17 +27,19 @@ internal static class NeovimInWezTermLauncher
                     "nvim.exe"),
                 "nvim.exe");
 
-            string target = args.Length == 0
-                ? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+            string? target = args.Length == 0
+                ? null
                 : Path.GetFullPath(args[0]);
-            if (!File.Exists(target) && !Directory.Exists(target))
+            if (target != null && !File.Exists(target) && !Directory.Exists(target))
             {
                 throw new FileNotFoundException("The selected path does not exist.", target);
             }
 
-            string workingDirectory = Directory.Exists(target)
-                ? target
-                : Path.GetDirectoryName(target) ?? Environment.CurrentDirectory;
+            string workingDirectory = target == null
+                ? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+                : Directory.Exists(target)
+                    ? target
+                    : Path.GetDirectoryName(target) ?? Environment.CurrentDirectory;
 
             var startInfo = new ProcessStartInfo
             {
@@ -59,7 +61,10 @@ internal static class NeovimInWezTermLauncher
             startInfo.ArgumentList.Add(workingDirectory);
             startInfo.ArgumentList.Add("--");
             startInfo.ArgumentList.Add(neovim);
-            startInfo.ArgumentList.Add(target);
+            if (target != null)
+            {
+                startInfo.ArgumentList.Add(target);
+            }
 
             Process.Start(startInfo);
             return 0;

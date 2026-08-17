@@ -71,7 +71,9 @@ extensions there.
 
 Windows 11 shows classic registry context-menu commands under **Show more
 options**. Associated files can be opened directly by double-clicking them; the
-Start-menu application opens Neovim in the user home directory.
+Start-menu application launches Neovim without a file or directory argument,
+allowing the configured session picker to open. Its terminal working directory
+is still the user home directory.
 
 The Scoop `nvim.exe` shim is marked hidden so Windows Search favors these
 shortcuts. This does not affect running `nvim` from a terminal.
