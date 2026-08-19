@@ -454,7 +454,6 @@ Set-RegistryValue `
     -Name "Neovim" `
     -Value $capabilitiesPath
 Set-RegistryValue -RelativePath $capabilitiesPath -Name "ApplicationName" -Value "Neovim"
-Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "10"
 Set-RegistryValue `
     -RelativePath $capabilitiesPath `
     -Name "ApplicationDescription" `
@@ -618,3 +617,4 @@ if ($userChoiceOverrides) {
 [ShortcutPropertyStore]::NotifyItemUpdated($nvimAliasShortcut)
 [ShortcutPropertyStore]::NotifyItemUpdated($normalizedNeovimPath)
 [ShortcutPropertyStore]::NotifyAssociationsChanged()
+Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "11"

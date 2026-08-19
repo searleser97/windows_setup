@@ -353,7 +353,7 @@ $neovimCapabilities = Get-ItemProperty `
     "HKCU:\Software\searleser97\Neovim\Capabilities" `
     -ErrorAction SilentlyContinue
 $hasCurrentNeovimRegistration =
-    $neovimCapabilities.SetupVersion -eq "10"
+    $neovimCapabilities.SetupVersion -eq "11"
 $neovimCommandKey = Get-Item `
     "HKCU:\Software\Classes\Neovim.WezTerm\shell\open\command" `
     -ErrorAction SilentlyContinue
