@@ -454,7 +454,7 @@ Set-RegistryValue `
     -Name "Neovim" `
     -Value $capabilitiesPath
 Set-RegistryValue -RelativePath $capabilitiesPath -Name "ApplicationName" -Value "Neovim"
-Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "8"
+Set-RegistryValue -RelativePath $capabilitiesPath -Name "SetupVersion" -Value "9"
 Set-RegistryValue `
     -RelativePath $capabilitiesPath `
     -Name "ApplicationDescription" `

@@ -19,13 +19,13 @@ internal static class NeovimInWezTermLauncher
                     "WezTerm",
                     "wezterm-gui.exe"),
                 "wezterm-gui.exe");
-            string neovim = FindExecutable(
+            string powerShell = FindExecutable(
                 Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                    "scoop",
-                    "shims",
-                    "nvim.exe"),
-                "nvim.exe");
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "Microsoft",
+                    "WindowsApps",
+                    "pwsh.exe"),
+                "pwsh.exe");
 
             string? target = args.Length == 0
                 ? null
@@ -60,10 +60,15 @@ internal static class NeovimInWezTermLauncher
             startInfo.ArgumentList.Add("--cwd");
             startInfo.ArgumentList.Add(workingDirectory);
             startInfo.ArgumentList.Add("--");
-            startInfo.ArgumentList.Add(neovim);
+            startInfo.ArgumentList.Add(powerShell);
+            startInfo.ArgumentList.Add("-NoLogo");
+            startInfo.ArgumentList.Add("-Command");
+            startInfo.ArgumentList.Add(
+                "if ($env:NVIM_LAUNCH_TARGET) " +
+                "{ nvim.exe -- $env:NVIM_LAUNCH_TARGET } else { nvim.exe }");
             if (target != null)
             {
-                startInfo.ArgumentList.Add(target);
+                startInfo.Environment["NVIM_LAUNCH_TARGET"] = target;
             }
 
             Process.Start(startInfo);
