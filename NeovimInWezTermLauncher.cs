@@ -19,13 +19,13 @@ internal static class NeovimInWezTermLauncher
                     "WezTerm",
                     "wezterm-gui.exe"),
                 "wezterm-gui.exe");
-            string powerShell = FindExecutable(
+            string neovim = FindExecutable(
                 Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "Microsoft",
-                    "WindowsApps",
-                    "pwsh.exe"),
-                "pwsh.exe");
+                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                    "scoop",
+                    "shims",
+                    "nvim.exe"),
+                "nvim.exe");
 
             string? target = args.Length == 0
                 ? null
@@ -47,6 +47,8 @@ internal static class NeovimInWezTermLauncher
                 UseShellExecute = false,
                 WorkingDirectory = workingDirectory
             };
+            CopyRequiredUserEnvironmentVariable(startInfo, "NVIM_COPILOT_CMD");
+            CopyRequiredUserEnvironmentVariable(startInfo, "NVIM_AI_PROMPTS_PATH");
             string wezTermConfig = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 ".wezterm.lua");
@@ -60,15 +62,10 @@ internal static class NeovimInWezTermLauncher
             startInfo.ArgumentList.Add("--cwd");
             startInfo.ArgumentList.Add(workingDirectory);
             startInfo.ArgumentList.Add("--");
-            startInfo.ArgumentList.Add(powerShell);
-            startInfo.ArgumentList.Add("-NoLogo");
-            startInfo.ArgumentList.Add("-Command");
-            startInfo.ArgumentList.Add(
-                "if ($env:NVIM_LAUNCH_TARGET) " +
-                "{ nvim.exe -- $env:NVIM_LAUNCH_TARGET } else { nvim.exe }");
+            startInfo.ArgumentList.Add(neovim);
             if (target != null)
             {
-                startInfo.Environment["NVIM_LAUNCH_TARGET"] = target;
+                startInfo.ArgumentList.Add(target);
             }
 
             Process.Start(startInfo);
@@ -79,6 +76,22 @@ internal static class NeovimInWezTermLauncher
             MessageBoxW(IntPtr.Zero, exception.Message, "Neovim", 0x10);
             return 1;
         }
+    }
+
+    private static void CopyRequiredUserEnvironmentVariable(
+        ProcessStartInfo startInfo,
+        string name)
+    {
+        string? value = Environment.GetEnvironmentVariable(
+            name,
+            EnvironmentVariableTarget.User);
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new InvalidOperationException(
+                $"Required user environment variable '{name}' is not configured. Rerun run.bat.");
+        }
+
+        startInfo.Environment[name] = value;
     }
 
     private static string FindExecutable(string preferredPath, string executableName)

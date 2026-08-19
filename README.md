@@ -57,10 +57,10 @@ text and source-code extensions, including dotfiles such as `.gitconfig`,
 
 The GUI launcher is compiled and installed to
 `%LOCALAPPDATA%\Programs\NeovimInWezTerm`, so the integration continues to work
-if this repository is moved or removed. It starts Neovim through profile-enabled
-PowerShell so environment variables configured by the PowerShell profile are
-available to Neovim. Rerun the registration script after pulling launcher
-updates:
+if this repository is moved or removed. It injects the user-scoped
+`NVIM_COPILOT_CMD` and `NVIM_AI_PROMPTS_PATH` environment variables and starts
+Neovim directly, avoiding a PowerShell process during editor startup. Rerun the
+registration script after pulling launcher updates:
 
 ```powershell
 .\Register-NeovimExplorer.ps1

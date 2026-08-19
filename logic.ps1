@@ -30,6 +30,20 @@ function Test-Command {
     return $null -ne (Get-Command $Name -ErrorAction SilentlyContinue)
 }
 
+function Set-UserEnvironmentVariableIfNeeded {
+    param(
+        [Parameter(Mandatory)][string]$Name,
+        [Parameter(Mandatory)][string]$Value
+    )
+
+    if ([Environment]::GetEnvironmentVariable($Name, "User") -eq $Value) {
+        Write-Skipped "user environment variable $Name"
+    } else {
+        [Environment]::SetEnvironmentVariable($Name, $Value, "User")
+        Write-Host "[run ] Configured user environment variable $Name"
+    }
+}
+
 function Test-WingetPackage {
     param([Parameter(Mandatory)][string]$Id)
 
@@ -306,6 +320,13 @@ foreach ($package in @("prettier", "pnpm", "yarn", "vsts-npm-auth")) {
 
 Install-WingetPackage "wez.wezterm"
 
+Set-UserEnvironmentVariableIfNeeded `
+    -Name "NVIM_COPILOT_CMD" `
+    -Value "& 'E:\WorkUtils\.copilot\Invoke-ConfiguredCopilot.ps1'"
+Set-UserEnvironmentVariableIfNeeded `
+    -Name "NVIM_AI_PROMPTS_PATH" `
+    -Value "E:\WorkUtils\.copilot\.my_ai_prompts.json"
+
 $neovimInstallDirectory = Join-Path $env:LOCALAPPDATA "Programs\NeovimInWezTerm"
 $neovimLauncher = Join-Path $neovimInstallDirectory "Neovim.exe"
 $startMenuDirectory = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs"
@@ -332,7 +353,7 @@ $neovimCapabilities = Get-ItemProperty `
     "HKCU:\Software\searleser97\Neovim\Capabilities" `
     -ErrorAction SilentlyContinue
 $hasCurrentNeovimRegistration =
-    $neovimCapabilities.SetupVersion -eq "9"
+    $neovimCapabilities.SetupVersion -eq "10"
 $neovimCommandKey = Get-Item `
     "HKCU:\Software\Classes\Neovim.WezTerm\shell\open\command" `
     -ErrorAction SilentlyContinue
